@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+ <head>
+<style>
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+<script type="text/javascript" src="bars.js"></script>
+<script type="text/javascript" src="http://mbostock.github.com/d3/d3.csv.js"></script>
+<script src="colorbrewer.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+<script>
+
+
+
+var csv_file = "SSA-SA-FYWL.csv";
+
+var headerNames;
+d3.csv(csv_file, function(error, data) {
+  headerNames = d3.keys(data[0]);
+  console.log(headerNames);
+});
+
+
+d3.csv(csv_file, function(pop_data){
+        //pop_data will be an array of json objects containing the data in from the csv
+        console.log("prices:", pop_data)
+        var this_data = pop_data.map(function(d){
+            //each d is one line of the csv file represented as a json object
+            //console.log("d", d)
+            // month = parse(d.month).getMonth();
+            year = d.Date;
+            console.log('year: ', year);
+
+            state = d[headerNames[4]];
+            console.log('state: ', state);
+
+            // the "+" converts the string (as formatted in csv) to a number, for d3
+            pop = +d[headerNames[9]];
+            console.log(headerNames[9], pop);
+           
+            return {"year": year, "value": pop, "state":state}
+        })
+        
+        console.log("data", this_data)
+        console.log(this_data[0])
+        bars(this_data);
+        
+    });
+
+
+</script>
+</head>
+
+ <body>
+    <h1>Daily Data Viz</h1>
+    <p>A personal challenge: tackle open data, and improve my data viz skills<br>
+        Kristin Henry (@KristinHenry) <br>
+        Aug 18, 2015</p>
+    <h2>Social Security Administration data: second draft</h2>
+    <svg id="svg"></svg>
+    <p>Wrong chart type, for this data, but I'm figuring out some D3 stuff:</p>
+    <ul>
+      <li>filtering data, while creating graph (on enter)</li>
+      <li>applying color, based on value of data objects, using color brewer, and such</li>
+      <li>basic interaction: bar highlighted on mouseover</li>
+      <li>tooltip: shows more info when mousing over bar</li>
+    </ul>
+    <p>Modified from http://bl.ocks.org/enjalot/1525346 and http://bl.ocks.org/KristinHenry/9414cd3e95d6fd67e3e1</p>
+    <script type="text/javascript">
+        init();
+    </script>
+
+
+ </body>
