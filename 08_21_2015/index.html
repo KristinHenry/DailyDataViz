@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+ <head>
+<style>
+
+body { font: 12px Arial;}
+
+path { 
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+
+
+/*.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: red;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}*/
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+<script type="text/javascript" src="bars.js"></script>
+<script type="text/javascript" src="http://mbostock.github.com/d3/d3.csv.js"></script>
+<script src="colorbrewer.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+<script>
+
+
+
+var csv_file = "SSA-SA-FYWL.csv";
+
+var headerNames;
+d3.csv(csv_file, function(error, data) {
+  headerNames = d3.keys(data[0]);
+  console.log(headerNames);
+});
+
+
+d3.csv(csv_file, function(pop_data){
+        //pop_data will be an array of json objects containing the data in from the csv
+        //console.log("prices:", pop_data)
+        var this_data = pop_data.map(function(d){
+            //each d is one line of the csv file represented as a json object
+            //console.log("d", d)
+            // month = parse(d.month).getMonth();
+            year = d.Date;
+            //console.log('year: ', year);
+
+            state = d[headerNames[4]];
+            //console.log('state: ', state);
+
+            // the "+" converts the string (as formatted in csv) to a number, for d3
+            pop = +d[headerNames[9]];
+            //console.log(headerNames[9], pop);
+           
+            return {"year": year, "value": pop, "state":state}
+        })
+        
+        //console.log("data", this_data)
+        
+        
+
+        //bars(this_data);
+
+        // group data by state
+        var nest = d3.nest()
+            .key(function(d){return d.state; })
+            .entries(this_data);
+
+        console.log("nested", nest)
+
+        lines(nest);
+        
+    });
+
+
+</script>
+</head>
+
+ <body>
+    <h1>Daily Data Viz</h1>
+    <p>A personal challenge: tackle open data, and improve my data viz skills<br>
+        Kristin Henry (@KristinHenry) <br>
+        Aug 21, 2015</p>
+    <h2>Social Security Administration data: fifth draft</h2>
+    <svg id="svg"></svg>
+    <p>This data works better as a multi-line graph. Still figuring out some D3 stuff:</p>
+    <ul>
+      <li>experimenting with axes and tick marks</li>
+      <li></li>
+      
+    </ul>
+    <p>Modified from http://bl.ocks.org/enjalot/1525346 and http://bl.ocks.org/KristinHenry/9414cd3e95d6fd67e3e1</p>
+    <script type="text/javascript">
+        init();
+    </script>
+
+
+ </body>
