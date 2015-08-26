@@ -21,5 +21,6 @@ Social Security Administration
 
 **Making text unselectable, mostly on text buttons for better user experience**
 >Why make any text unselectable?  You might be using text as a button, and the cursor can be confusing, especiall if you just want user to mouse over the text-button to highlight another area in the graph.
+
 >This is a css thing, and complicated by the browsers doing things completely differently. Here's a css style solution: http://jsfiddle.net/Marcel/jH36t/
 
