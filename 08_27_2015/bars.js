@@ -127,25 +127,25 @@ var lines = function(data){
     // building the interactive legend 
     var maxrow = 26;
     var legend = chart.selectAll(".legend")  // ToDo: study dif btwn select(#classname) and selectAll(.clasname)
-    .data(color.domain())
-    .enter().append("g")
-    .attr("class", "legend")
-    .attr("transform", function(d,i){ return "translate(" + (30*(i%maxrow)) +"," + (Math.floor(i/maxrow))*20 +")";})
+        .data(color.domain())
+        .enter().append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d,i){ return "translate(" + (30*(i%maxrow)) +"," + (Math.floor(i/maxrow))*20 +")";})
 
     legend.append("text")
-    .attr("x", 26)
-    .attr("y",-34)
-    .attr("dy", ".45em")
-    .attr("fill", function(d){return color(d);})
-    .style("text-anchor", "end")
-    .text(function(d){return d; })
+        .attr("x", 26)
+        .attr("y",-34)
+        .attr("dy", ".45em")
+        .attr("fill", function(d){return color(d);})
+        .style("text-anchor", "end")
+        .text(function(d){return d; })
 
     // this makes the text buttons interactive, capturing mouseover over text
     legend.on("mouseover", 
             function(d){ 
                 d3.select(this).transition()
                     .duration(10)
-                    //.style("stroke-width", 2);
+                    .style("font-size", "16px")
                 d3.select("#linechart").selectAll("path#"+d)
                     .transition()
                     .duration(10)
@@ -156,7 +156,7 @@ var lines = function(data){
             function(d){ 
                 d3.select(this).transition()
                     .duration(10)
-                    .style("stroke-width", 0)
+                    .style("font-size", "12px")
                 d3.select("#linechart").selectAll("path#"+d)
                     .transition()
                     .duration(10)
