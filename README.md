@@ -24,3 +24,7 @@ Social Security Administration
 
 >This is a css thing, and complicated by the browsers doing things completely differently. Here's a css style solution: http://jsfiddle.net/Marcel/jH36t/
 
+** shapes and text  **
+> These are not nestable, but must be grouped together in a container object
+
+> "A rect can't contain a text element"  http://stackoverflow.com/questions/20644415/d3-appending-text-to-a-svg-rectangle
