@@ -2,6 +2,19 @@ var w = 850
 var h = 400
 
 
+var zero_fill = function(arr){
+    var i = arr.length;
+    console.log(arr);
+    console.log(i);
+    while(i>0){
+        i--;
+        console.log(i);
+        arr[i] = 0;
+        
+    }
+    console.log(arr);
+}
+
 // Drawing line graphs now
 //-------------------------------------------------------------------------------
 
@@ -124,6 +137,56 @@ var lines = function(data){
             .call(yAxis);
 
 
+        
+
+
+    var hideAll = chart.append("g")
+        //.append("text")
+
+         // hideAll.append("text")
+    //     .attr("x", 26)
+    //     .attr("y",-34)
+    //     .attr("fill", "black";})
+    //     //.style("text-anchor", "middle")
+    //     .text(function(d){return "Hide All"; })
+
+    
+
+
+    hideAll.append("rect")
+        .attr("x", w-50)
+        .attr("y", -44)
+        .attr("width", 50)
+        .attr("height", 40)
+        .style("fill", "#ccc")
+        // .attr('class', 'click-capture')
+        // .style('visibility', 'hidden')
+
+
+        .on("click", function(){
+                        console.log("-----------------hide all"); 
+                        zero_fill(isActive); // set all states to inactive
+
+                        chart.selectAll(".legend")
+                            .transition()
+                            .duration(10)
+                            .style("fill", function(){return "#ccc";})
+                            .attr("opacity", .3)
+                        d3.select("#linechart").selectAll("path")
+                            .transition()
+                            .duration(10)
+                            .style("stroke", function(){return "#ccc"})
+                            .attr("opacity", .3)
+
+                    })
+
+    hideAll.append("text")
+        .attr("x", w-44)
+        .attr("y", -14)
+        .attr("fill", "black")
+        .text("Hide All")
+
+
     // building the interactive legend 
     var maxrow = 26;
     var legend = chart.selectAll(".legend")  // ToDo: study dif btwn select(#classname) and selectAll(.clasname)
@@ -132,13 +195,14 @@ var lines = function(data){
         .attr("class", "legend")
         .attr("transform", function(d,i){ return "translate(" + (30*(i%maxrow)) +"," + (Math.floor(i/maxrow))*20 +")";})
 
-    legend.append("text")
+    var txt = legend.append("text")
         .attr("x", 26)
         .attr("y",-34)
         .attr("dy", ".45em")
         .attr("fill", function(d){return color(d);})
         .style("text-anchor", "end")
         .text(function(d){return d; })
+    
 
     // this makes the text buttons interactive, capturing mouseover over text
     legend.on("mouseover", 
