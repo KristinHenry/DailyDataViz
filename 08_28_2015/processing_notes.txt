@@ -1,0 +1,34 @@
+Notes on using Processing
+
+--on linux, start ide from command line:
+
+>  cd dir_with_processing
+
+>  ./processing
+
+this opens up the Processing Developing Environment
+
+
+------------------------------
+Can use ctrl-r to trigger "play", from the ide
+
+
+------------------------------
+
+
+Trying out p5.js 
+==============================
+http://p5js.org/get-started/
+https://github.com/processing/p5.js/wiki/p5.js-overview
+
+loading external csv files:
+http://p5js.org/reference/#/p5/loadTable
+https://github.com/processing/p5.js/wiki/Loading-external-files:-AJAX,-XML,-JSON
+
+-- loading from inside preload() function ensures data loads before setup() & draw() execute.
+
+loadTable(filename,[options],[callback])
+
+// if outside of preload(), can define a callback method to execute when data loads.
+// this will save header of csv file
+loadTable(filename, "header", "csv", [callback])
