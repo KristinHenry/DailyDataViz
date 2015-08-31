@@ -1,0 +1,10 @@
+# August 30, 2015
+
+Periodic Table of Elements Date 
+
+data source: csv downloaded from http://www.data-explorer.com/data  
+
+
+d3.js and csv file
+
+
