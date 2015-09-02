@@ -24,7 +24,28 @@ Social Security Administration
 
 >This is a css thing, and complicated by the browsers doing things completely differently. Here's a css style solution: http://jsfiddle.net/Marcel/jH36t/
 
-** shapes and text  **
+**Shapes and text**
 > These are not nestable, but must be grouped together in a container object
 
 > "A rect can't contain a text element"  http://stackoverflow.com/questions/20644415/d3-appending-text-to-a-svg-rectangle
+
+
+**Dealing with spaces in header of csv file**
+
+> When looping through rows in a csv file, and getting data for that field, might do something like
+ 
+    my_data.map(function(d){
+
+            field_value = d.field_name;
+
+       })
+
+> But if there are spaces in the field names in the csv, you can't access like this. Instead do something like:
+
+    my_data.map(function(d){
+
+            field_value = d['Field Name'];
+
+       })
+
+
