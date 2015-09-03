@@ -1,6 +1,6 @@
 # August 30, 2015
 
-Periodic Table of Elements Date 
+Periodic Table of Elements Data
 
 data source: csv downloaded from http://www.data-explorer.com/data  
 
