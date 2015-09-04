@@ -23,16 +23,22 @@ var bubbles = function(data){
     //y.domain([ymin,ymax]);
     console.log("x scale: ", x.range());
 
+    var radMin = d3.min(data, function(d){return Math.floor(d.atomicRadius); });
+    var radMax = d3.max(data, function(d){return Math.floor(d.atomicRadius); });
+    var radScale = d3.scale.linear().range([0,80]);
+    radScale.domain([radMin, radMax]);
+
+    var densMin = d3.min(data, function(d){return Math.floor(d.density); });
+    var densMax = d3.max(data, function(d){return Math.floor(d.density); });
+    var densScale = d3.scale.linear().range([0,80]);
+    densScale.domain([densMin, densMax]);
+
 
     // set up so we can scale melting point ranges to fit n graph
     var meltMin = d3.min(data, function(d){return Math.floor(d.meltingPoint); });
     var meltMax = d3.max(data, function(d){return Math.floor(d.meltingPoint); });
     var meltScale = d3.scale.linear().range([0, 80]); // can make this subchart size-based
     meltScale.domain([meltMin, meltMax]);
-    console.log("meltMin", meltMin);
-    console.log("meltMax", meltMax);
-    console.log("meltscale: ", meltScale.range(), meltScale.domain());
-    console.log("meltScale(100): ", meltScale(1000));
 
 
     
@@ -49,8 +55,9 @@ var bubbles = function(data){
         .enter().append("rect")
         .attr("class", "cell")
         .attr("x", function(d){ return +d.atomicNum*barWidth - barWidth; })
-        .attr("y", function(d){ return baseBars - (d.atomicRadius* yMult); })
-        .attr("height", function(d){ return +d.atomicRadius * yMult; })
+        .attr("y", function(d){ return baseBars - radScale(+d.atomicRadius); })
+        //.attr("height", function(d){ return +d.atomicRadius * yMult; })
+        .attr("height", function(d){return radScale(+d.atomicRadius)})
         .attr("width", function(d){ return barWidth; })
         .attr("fill", "blue")
         .attr("stroke", "black")
@@ -62,9 +69,8 @@ var bubbles = function(data){
         .enter().append("circle")
         .attr("class", "dot")
         .attr("cx", function(d){ return +d.atomicNum*barWidth - barWidth/2; })
-        //.attr("cy", function(d){ return 140 - (d.atomicRadius* yMult) ; })
-        //.attr("cy", function(d) { return 140 - (d.atomicWeight) ;})
-        .attr("cy", function(d){return baseDots - (d.density*yMult/8);}) // scale is problematic here
+        //.attr("cy", function(d){return baseDots - (d.density*yMult/8);}) // scale is problematic here
+        .attr("cy", function(d){return baseDots - densScale(d.density); })
         .attr("r", function(d){ return 2; })
         .attr("fill", "red")
         .attr("opacity", .55)
@@ -74,8 +80,7 @@ var bubbles = function(data){
         .enter().append("circle")
         .attr("class", "dot2")
         .attr("cx", function(d){ return +d.atomicNum*barWidth - barWidth/2; })
-        .attr("cy", function(d){ return baseDots2 - meltScale(d.meltingPoint);
-                                }) // scale is problematic here
+        .attr("cy", function(d){ return baseDots2 - meltScale(d.meltingPoint); }) 
         .attr("r", function(d){ return 2; })
         .attr("fill", "grey")
         .attr("opacity", .55)
