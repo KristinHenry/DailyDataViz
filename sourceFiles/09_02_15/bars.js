@@ -11,19 +11,36 @@ var bubbles = function(data){
     //1. Set the range functions ----yeah, yeah, functions don't always look like functions in d3.
     //var xmin = d3.min(data, function(d){return d.atomicNum});
     var xmin = 0;
-    var xmax = d3.max(data, function(d){return d.atomicNum});
+    var xmax = d3.max(data, function(d){return d.atomicNum; });
     //var ymin = d3.min(data, function(d){return d.atomicWeight});
     //var ymax = d3.max(data, function(d){return d.atomicWeight});
+
+    
 
     var x = d3.scale.linear().range([0+pad, w]);
     //var y = d3.scale.linear().range([h, 0]);
     x.domain([xmin,xmax]);
     //y.domain([ymin,ymax]);
+    console.log("x scale: ", x.range());
+
+
+    // set up so we can scale melting point ranges to fit n graph
+    var meltMin = d3.min(data, function(d){return Math.floor(d.meltingPoint); });
+    var meltMax = d3.max(data, function(d){return Math.floor(d.meltingPoint); });
+    var meltScale = d3.scale.linear().range([0, 80]); // can make this subchart size-based
+    meltScale.domain([meltMin, meltMax]);
+    console.log("meltMin", meltMin);
+    console.log("meltMax", meltMax);
+    console.log("meltscale: ", meltScale.range(), meltScale.domain());
+    console.log("meltScale(100): ", meltScale(1000));
+
+
     
     var vis = d3.select("#chart");
 
-    var baseBars = 140;
-    var baseDots = 40;
+    var baseBars = 240;
+    var baseDots = 130;
+    var baseDots2 = 50;
 
     var barWidth = 10;
     var yMult = 20;
@@ -50,6 +67,17 @@ var bubbles = function(data){
         .attr("cy", function(d){return baseDots - (d.density*yMult/8);}) // scale is problematic here
         .attr("r", function(d){ return 2; })
         .attr("fill", "red")
+        .attr("opacity", .55)
+
+    vis.selectAll(".dot2")
+        .data(data)
+        .enter().append("circle")
+        .attr("class", "dot2")
+        .attr("cx", function(d){ return +d.atomicNum*barWidth - barWidth/2; })
+        .attr("cy", function(d){ return baseDots2 - meltScale(d.meltingPoint);
+                                }) // scale is problematic here
+        .attr("r", function(d){ return 2; })
+        .attr("fill", "grey")
         .attr("opacity", .55)
 
 
