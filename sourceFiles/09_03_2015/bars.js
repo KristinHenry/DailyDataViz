@@ -41,7 +41,7 @@ var barChart = function(data, className, targSVG, yOffset, fillColor, xname, yna
         .attr("width", function(d){ return dx; })
         .attr("fill", fillColor)
         .attr("stroke", "black")
-        .attr("opacity", 35)
+        .attr("opacity", .35)
 }
 
 
