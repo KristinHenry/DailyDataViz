@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+ <head>
+<style>
+
+body { font: 12px Arial;}
+
+path { 
+    
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #ccc;
+}
+
+/*.dot {
+    stroke: #333;
+}*/
+
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+
+<script type="text/javascript" src="bars.js"></script>
+<script type="text/javascript" src="http://mbostock.github.com/d3/d3.csv.js"></script>
+<script src="colorbrewer.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+<script>
+
+var csv_file = "elements.csv";
+
+// get header names from csv file 
+var headerNames;
+d3.csv(csv_file, function(error, data) {
+  headerNames = d3.keys(data[0]);
+  //console.log(headerNames);
+});
+
+
+d3.csv(csv_file, function(atom_data){
+
+    // atom_data will be array of json objects containing data from the csv
+
+    elem_data = atom_data.map(function(d){
+            //console.log(d);
+            var elemData = {    
+                "elemName": d["Element"], 
+                "elemSymbol": d["Symbol"],
+                "atomicNum": d["Atomic Number"], 
+                "atomicRadius": d["Atomic Radius"],
+                "atomicWeight": d['Atomic Weight'],
+                "density": d['Density'],
+                "foundBy": d['Discoverer'],
+                "yearFound": d['Year of Discovery'],
+                "electronConfig": d['Electron Configuration'],
+                "electronegativity": d['Electronegativity'],
+                "firstIonPot": d['First Ionization Potential'],
+                "specHeatCap": d['Specific Heat Capacity'],
+                "meltingPoint": d['Melting Point (K)'],
+                "isotopes": d['Isotopes'],
+                "ionicRadius": d['Ionic Radius']
+            }
+            
+
+            return elemData
+    })
+
+    //console.log(elem_data);
+
+    // draw graph from our formatted data
+    bubbles(elem_data);   
+        
+});
+
+
+</script>
+</head>
+
+ <body>
+    <h1>Daily Data Viz</h1>
+    <p>A personal challenge: tackle open data, and improve my data viz skills<br>
+        Kristin Henry (@KristinHenry) <br>
+        Sept 5, 2015</p>
+    <h2>Elements: early draft visualization</h2>
+    <svg id="svg"></svg>
+    <p>Figuring out some D3 stuff:</p>
+    <ul>
+      <li>more experimenting with abstracitng chart code, and making more reusable</li>
+      <li>sizing the charts dynamically</li>  
+      <li>ToDo: deal with elems that don't have data in all fields, like higher numbered atomic elements</li>
+    </ul>
+    <p>CSV file on Elements found at http://www.data-explorer.com/data</p>
+    <script type="text/javascript">
+        init();
+    </script>
+
+
+ </body>
