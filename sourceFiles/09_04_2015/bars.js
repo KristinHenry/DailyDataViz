@@ -43,14 +43,19 @@ var dotChart = function(data, className, targSVG, yOffset, dotColor, xname, ynam
 }
 
 
-var barChart = function(data, className, targSVG, yOffset, fillColor, xname, yname, dx, dy){
+var barChart = function(h, data, className, targSVG, yOffset, fillColor, xname, yname, dx, dy){
     console.log(className);
 
     var yMin = d3.min(data, function(d){return Math.floor(d[yname]); });
     var yMax = d3.max(data, function(d){return Math.floor(d[yname]); });
-    var yScale = d3.scale.linear().range([0,80]);
+    var yScale = d3.scale.linear().range([0,h]);
     //yScale.domain([yMin, yMax]);
     yScale.domain([yMax, yMin]);
+
+    var xMin = d3.min(data, function(d){return Math.floor(d[xname]); });
+    var xMax = d3.max(data, function(d){return Math.floor(d[xname]); });
+    var xScale = d3.scale.linear().range([0,w]);
+    xScale.domain([xMin, xMax]);
 
 
     var x = 0;
@@ -60,10 +65,10 @@ var barChart = function(data, className, targSVG, yOffset, fillColor, xname, yna
         .data(data)
         .enter().append("rect")
         .attr("class", className)
-        .attr("x", function(d){return d[xname]*dx - dx; })
+        .attr("x", function(d){return dx/4 + (d[xname]*dx - dx); })
         .attr("y", function(d){return yScale(d[yname]) ; })
-        .attr("height", function(d){ return 80 - yScale(d[yname]); })
-        .attr("width", function(d){ return dx; })
+        .attr("height", function(d){ return h - yScale(d[yname]); })
+        .attr("width", function(d){ return 2; })
         .attr("fill", fillColor)
         .attr("stroke", "black")
         .attr("opacity", .35)
@@ -78,9 +83,15 @@ var barChart = function(data, className, targSVG, yOffset, fillColor, xname, yna
                 .orient("left")
                 .ticks(4)
                 )
-
-
-
+    y += h;
+    targSVG.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(" + x + "," + y + ")")
+        .call(d3.svg.axis()
+                .scale(xScale)
+                .orient("botom")
+                .ticks(0)
+                )
 
 
 }
@@ -103,7 +114,7 @@ var bubbles = function(data){
 
 
     //experimenting with abstracting chart drawing
-    barChart(data, "cell2", vis, baseBars, "blue", "atomicNum", "atomicRadius", barWidth);
+    barChart(140, data, "cell2", vis, baseBars, "blue", "atomicNum", "atomicRadius", barWidth);
     // dotChart(data, "dot3", vis, baseDots, "red", "atomicNum", "density", barWidth, 2);
     dotChart(data, "dot3", vis, baseDots, "red", "atomicNum", "atomicRadius", barWidth, 2);
     dotChart(data, "dot4", vis, baseDots2, "grey", "atomicNum", "meltingPoint", barWidth, 2);
