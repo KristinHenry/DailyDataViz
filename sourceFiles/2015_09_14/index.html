@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+circle {
+  /*fill: #fff;*/
+  fill-opacity: .25;
+  /*stroke: #CCC;*/
+  /*stroke-width: 1px;*/
+}
+
+.leaf circle {
+  /*fill: #9BBA91;*/
+  fill-opacity: 1;
+}
+
+text {
+  font: 10px sans-serif;
+}
+
+</style>
+<body>
+<svg id="svg"></svg>
+
+<script src="d3.min.js"></script>
+<script>
+var w = 850;
+var h = 300;
+var pad = 10;
+var colors = ["#ccebc5","#a8ddb5","#7bccc4","#4eb3d3","#2b8cbe","#0868ac","#084081"];
+
+
+
+
+var circleChart = function(chart_w, chart_h, chart_data, targSVG, chart_colors, dx){
+    console.log(chart_w);
+
+    var diameter = chart_h, //960,
+    format = d3.format(",d");
+
+
+    var color = d3.scale.ordinal()
+        .domain(['text', 'app', 'social', 'email', 'phone', 'face'])
+        .range(["#ccebc5","#a8ddb5","#7bccc4","#4eb3d3","#2b8cbe","#0868ac","#084081"]);
+        //.range(chart_colors);
+
+
+    var pack = d3.layout.pack()
+        .size([diameter - 14, diameter - 14])
+        .value(function(d) { return d.size; });
+
+    //var svg = d3.select("#chart").append("svg")
+    var bubbles = d3.select(targSVG).append("svg")
+        // .attr("width", diameter)
+        // .attr("height", diameter)
+      .append("g")
+        .attr("transform", "translate(2,2)");
+
+
+    // console.log("---------------", chart_data);
+
+   
+
+
+
+    var node = bubbles.datum(chart_data).selectAll(".node")
+        .data(pack.nodes)
+      .enter().append("g")
+        .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
+        .attr("transform", function(d) {  //console.log(d); //console.log(d.grouptype);
+                                         
+                                         
+                                        // d.grouptype ? console.log("d.x: ", d.x) : console.log('not ages')
+                                        return "translate(" + (d.x) + "," + (d.y) + ")"; });
+
+    node.append("title")
+        .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); });
+
+    node.append("circle")
+        .attr("r", function(d) { return d.r; })
+        .style("fill", function(d) { return d.children ? '#fff' : color(d.name); });
+
+  
+    node.filter(function(d) { //console.log("grouptype: ", d.grouptype); 
+                              return d.grouptype=="agegroup"; })  
+      .append("text")
+      .attr("dy", function(d){ return (d.r + 10); })
+      .style("text-anchor", "middle")
+      .style('font', "16px")
+      .text(function(d) { return d.name.substring(0, d.r / 3); });
+
+
+
+    // node.filter(function(d) { return !d.children; })
+    //     // .style('stroke', function(d){return '#999';})
+    //     .append("text")
+    //     .attr("dy", ".3em")
+    //     .style("text-anchor", "middle")
+    //     .text(function(d) { return d.name.substring(0, d.r / 3); });
+
+  return bubbles;
+}
+
+
+
+var init = function()
+{
+    console.log("init graphs");
+
+    //setup the svg
+    var svg = d3.select("#svg")
+        .attr("width", w+100)
+        .attr("height", h+100)
+    
+
+    svg.append("svg:rect")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("stroke", "#CCC")
+        .attr("fill", "none")
+
+
+    svg.append("svg:g")
+        .attr("id", "chart")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("transform", "translate(10,10)")         
+    
+}
+
+
+
+
+init();
+
+d3.json("test_data.json", function(error, data){
+    if (error) throw error;
+    console.log(data.children.length)
+
+    var total_count = 0; 
+    data.children.forEach(function(d){
+        total_count += d.size;
+    })
+
+
+
+    bubble_width = d3.scale.linear()
+          .domain([0,total_count])
+          .range([20,w])
+
+
+
+    var dx = 0;
+    data.children.forEach(function(d, i){
+                                        b_width = bubble_width(d.size);// + 10;
+
+
+                                        console.log(dx);
+                                        console.log("count for this age group: " + d.children.length);
+                                        console.log(d);
+                                        console.log(b_width);
+                                        console.log("value for this age group: " + d.size);
+                                        var chart = circleChart(b_width, b_width, d, "#chart", colors, dx)
+                                        chart.attr("transform", "translate(" + (10+dx) +","+ (200 -b_width/2)  +")")
+
+                                        dx += b_width;
+                                        i+= 1;
+                                    });
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// var diameter = 480, //960,
+//     format = d3.format(",d");
+
+
+// var color = d3.scale.ordinal()
+//     // .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+//     .range(["#ccebc5","#a8ddb5","#7bccc4","#4eb3d3","#2b8cbe","#0868ac","#084081"]);
+
+// var pack = d3.layout.pack()
+//     .size([diameter - 4, diameter - 4])
+//     .value(function(d) { return d.size; });
+
+// var svg = d3.select("body").append("svg")
+//     .attr("width", diameter)
+//     .attr("height", diameter)
+//   .append("g")
+//     .attr("transform", "translate(2,2)");
+
+// var xStart = 0;
+
+// d3.json("convo_data.json", function(error, root) {
+//   if (error) throw error;
+
+//   console.log(root.children);
+
+//   root.children.forEach(function(child){ console.log(child)
+
+  
+
+
+//  // var node = svg.datum(root).selectAll(".node")
+//   var node = svg.datum(child).selectAll(".node")
+//       .data(pack.nodes)
+//     .enter().append("g")
+//       .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
+//       .attr("transform", function(d) {  //console.log(d); //console.log(d.grouptype);
+                                       
+//                                        d.x = d.x + xStart;
+//                                        //d.grouptype ? console.log(d.x) : console.log('not ages')
+//                                       return "translate(" + (d.x) + "," + (d.y) + ")"; });
+
+//   node.append("title")
+//       .text(function(d) { return d.name + (d.children ? "" : ": " + format(d.size)); });
+
+//   node.append("circle")
+//       .attr("r", function(d) { return d.r; })
+//       .style("fill", function(d) { return d.children ? color(0) : color(d.name); });
+
+  
+//   node.filter(function(d, i) { return d.grouptype=="agegroup"; })
+//       .attr("transform", function(d){var xD = xStart; xStart+= 2*d.r; return "translate("+ (xD+ d.r)  + ",200)"})
+
+//       //.attr("class", function(d) { console.log("**********************agegroup: ", d.name);  return d.name; })
+//       //.attr("transform", function(d){ return "translate(" + d.x + "," + d.y + ")"; });
+     
+      
+//       .append("text")
+//       .attr("dy", function(d){ return d.r; })
+//       .style("text-anchor", "middle")
+//       .text(function(d) { return d.name.substring(0, d.r / 3); });
+
+
+
+//   node.filter(function(d) { return !d.children; })
+//       .style('stroke', function(d){return '#999';})
+//       .append("text")
+//       .attr("dy", ".3em")
+//       .style("text-anchor", "middle")
+//       .text(function(d) { return d.name.substring(0, d.r / 3); });
+
+//  }) 
+
+// });
+
+// d3.select(self.frameElement).style("height", diameter + "px");
+
+
+
+</script>
