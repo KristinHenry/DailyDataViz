@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.x.axis path {
+  display: none;
+}
+
+</style>
+<body>
+<h2>Daily Data Viz: 09/13/2015</h2>
+<p>Now using a seperate file for the chart, importing it here in the html with script tag, and calling from drawChart script file</p>
+<p>toDo: improve placement/spacing of caption showing sample sizes</p>
+<!-- .................................................... -->
+<!-- External scripts draw graph into element of this tag, must be above charting script tags -->
+<svg id="svg"></svg>
+<!-- .................................................... -->
+
+
+<!-- ........................................ -->
+<!-- These are the tags for insterting script, place at bottom of page so it loads after page content -->
+<script src="d3.min.js"></script>
+<script type="text/javascript" src="groupedBarChart.js"></script>
+<script type="text/javascript" src="drawChart.js"></script>
+<!-- ........................................ -->
+

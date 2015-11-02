@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.x.axis path {
+  display: none;
+}
+
+</style>
+<body>
+<h2>Daily Data Viz: 09/12/2015</h2>
+<p>toDo: improve placement/spacing of caption showing sample sizes</p>
+<!-- .................................................... -->
+<!-- External scripts draw graph into element of this tag, must be above charting script tags -->
+<svg id="svg"></svg>
+<!-- .................................................... -->
+
+
+<!-- ........................................ -->
+<!-- These are the tags for insterting script, place at bottom of page so it loads after page content -->
+<script src="d3.min.js"></script>
+<script type="text/javascript" src="drawChart.js"></script>
+<!-- ........................................ -->
+
