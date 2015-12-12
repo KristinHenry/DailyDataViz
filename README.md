@@ -1,6 +1,6 @@
-# DailyDataViz
+# DataViz
 
-Pushing myself to improve my d3 & p5 skills, with open data sources and daily practice.
+Pushing myself to improve my d3 & p5 skills, with open data sources and daily-ish practice.
 
 
 **Data sources:**
